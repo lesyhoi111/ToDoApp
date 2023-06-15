@@ -17,9 +17,9 @@ const {width} = Dimensions.get('screen');
 const CustomDrawer = props => {
   return (
     <DrawerContentScrollView {...props}>
-      {/* <ImageBackground source={IMGS.bgPattern} style={{height: 140}}>
-        <Image source={IMGS.user} style={styles.userImg} />
-      </ImageBackground> */}
+      <ImageBackground source={require('../image/backgrounduser.jpg')} style={{height: 140}}>
+        <Image source={require('../image/avatar.png')} style={styles.userImg} />
+      </ImageBackground>
       <View style={styles.drawerListWrapper}>
         <DrawerItemList {...props} />
       </View>

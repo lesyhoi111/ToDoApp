@@ -14,10 +14,15 @@ function Routes() {
             <Drawer.Navigator
                drawerContent={props => <CustomDrawer {...props} />}
                screenOptions={{
-                 headerShown: true,
+                 headerShown: false,
                  drawerLabelStyle: {
-                   marginLeft: -20,
+                   marginLeft: 5,
+                   fontSize:17
                  },
+                 drawerStyle: {
+                  backgroundColor: 'antiquewhite',
+                },
+                drawerActiveBackgroundColor:"rgba(265,265,265,0.7)"
                }}
             >
                 <Drawer.Screen component={Main} name={"Main"} />
