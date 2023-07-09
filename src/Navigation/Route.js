@@ -1,15 +1,25 @@
+import React, { useState, useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import React from 'react';
+// import React from 'react';
 import Main from '../Screens/Main';
 import Setting from '../Screens/Setting';
 import CustomDrawer from './CustomDrawer';
+import { EventRegister } from 'react-native-event-listeners'
+import theme from '../../config/theme'
+import themeContext from '../../config/themeContext'
 
 const Drawer = createDrawerNavigator();
 
 
 function Routes() {
+  const [ischecked,setIsChecked]=useState(false)
+  useEffect(()=>{
+      let eventlistener=EventRegister.addEventListener("changetheme",(data)=>{setIsChecked(data)})
+      return ()=>{EventRegister.removeEventListener(eventlistener)}
+  })
     return (
+      <themeContext.Provider value={ischecked===true ? theme.dark:theme.light}>
         <NavigationContainer>
             <Drawer.Navigator
                drawerContent={props => <CustomDrawer {...props} />}
@@ -30,6 +40,7 @@ function Routes() {
                 
             </Drawer.Navigator>
         </NavigationContainer>
+      </themeContext.Provider>
     )
 }
 
