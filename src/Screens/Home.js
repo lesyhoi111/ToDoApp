@@ -1,7 +1,9 @@
 
-import React, { Component, useState } from 'react';
+import React, { Component, useState,useContext,useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Dimensions, Button, TouchableOpacity } from 'react-native';
 import Search from './components/Search';
+import Task from '../../model/taskModel';
+import themeContext from '../../config/themeContext'
 import { FAB } from '@rneui/themed';
 import { CheckBox } from '@rneui/base';
 const { width, height } = Dimensions.get('window');
@@ -22,7 +24,7 @@ const Home = ({ navigation }) => {
             <SafeAreaView style={styles.container}>
             <View style={styles.boxHeader}>
                 <Text style={styles.txtHeader}>Home</Text>
-                <Button title="..." ></Button>
+                <Button style={{position: 'absolute',top:1,right:5}} title="..." ></Button>
             </View>
             <View>
                 <Search></Search>
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
         width:width,
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:'white'
+        backgroundColor:'white',
     },
     txtHeader:{
         fontSize:25,
