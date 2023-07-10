@@ -1,11 +1,5 @@
-
-<<<<<<< Updated upstream
 import React, { Component, useState,useContext,useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Dimensions, Button, TouchableOpacity } from 'react-native';
-=======
-import React, { Component, useState } from 'react';
-import { View, Text, StyleSheet, Modal, SafeAreaView, Dimensions, Pressable, TouchableOpacity } from 'react-native';
->>>>>>> Stashed changes
 import Search from './components/Search';
 import Task from '../../model/taskModel';
 import themeContext from '../../config/themeContext'
@@ -13,16 +7,11 @@ import { FAB } from '@rneui/themed';
 import { CheckBox } from '@rneui/base';
 const { width, height } = Dimensions.get('window');
 
-<<<<<<< Updated upstream
-const Home = ({ navigation }) => {
-=======
+
 
 const Home = ({ navigation }) => {
-<<<<<<< HEAD
 
     const [isvisible, setVisible] = useState(false);
-=======
->>>>>>> Stashed changes
     const {listTask,getLisst,addTask,updateTask,deleteTask}=Task()
     const theme=useContext(themeContext);
     useEffect(()=>{
@@ -30,10 +19,6 @@ const Home = ({ navigation }) => {
         
             console.log(listTask)
     },[listTask])
-<<<<<<< Updated upstream
-=======
->>>>>>> 8981405122ce4c89b585fea5cabdaea77a9bb09c
->>>>>>> Stashed changes
     const goToScreen = () => {
         navigation.navigate("Setting");
     }
@@ -42,9 +27,7 @@ const Home = ({ navigation }) => {
             <SafeAreaView style={styles.container}>
             <View style={styles.boxHeader}>
                 <Text style={styles.txtHeader}>Home</Text>
-<<<<<<< Updated upstream
                 <Button style={{position: 'absolute',top:1,right:5}} title="..." ></Button>
-=======
                 <TouchableOpacity 
                     style={styles.btnMore}  
                     onPress={()=>{
@@ -53,7 +36,7 @@ const Home = ({ navigation }) => {
                 >
                     <Text style={{color:'black', fontSize:25}}>...</Text>
                 </TouchableOpacity>
->>>>>>> Stashed changes
+
             </View>
             <View>
                 <Search></Search>
