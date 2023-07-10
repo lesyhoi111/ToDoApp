@@ -1,5 +1,5 @@
 import React, { Component, useState,useContext,useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Dimensions, Button, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Dimensions, Pressable, TouchableOpacity, Modal } from 'react-native';
 import Search from './components/Search';
 import Task from '../../model/taskModel';
 import themeContext from '../../config/themeContext'
@@ -27,7 +27,6 @@ const Home = ({ navigation }) => {
             <SafeAreaView style={styles.container}>
             <View style={styles.boxHeader}>
                 <Text style={styles.txtHeader}>Home</Text>
-                <Button style={{position: 'absolute',top:1,right:5}} title="..." ></Button>
                 <TouchableOpacity 
                     style={styles.btnMore}  
                     onPress={()=>{
