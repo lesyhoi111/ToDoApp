@@ -1,6 +1,11 @@
 
+<<<<<<< Updated upstream
 import React, { Component, useState,useContext,useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Dimensions, Button, TouchableOpacity } from 'react-native';
+=======
+import React, { Component, useState } from 'react';
+import { View, Text, StyleSheet, Modal, SafeAreaView, Dimensions, Pressable, TouchableOpacity } from 'react-native';
+>>>>>>> Stashed changes
 import Search from './components/Search';
 import Task from '../../model/taskModel';
 import themeContext from '../../config/themeContext'
@@ -8,7 +13,16 @@ import { FAB } from '@rneui/themed';
 import { CheckBox } from '@rneui/base';
 const { width, height } = Dimensions.get('window');
 
+<<<<<<< Updated upstream
 const Home = ({ navigation }) => {
+=======
+
+const Home = ({ navigation }) => {
+<<<<<<< HEAD
+
+    const [isvisible, setVisible] = useState(false);
+=======
+>>>>>>> Stashed changes
     const {listTask,getLisst,addTask,updateTask,deleteTask}=Task()
     const theme=useContext(themeContext);
     useEffect(()=>{
@@ -16,15 +30,30 @@ const Home = ({ navigation }) => {
         
             console.log(listTask)
     },[listTask])
+<<<<<<< Updated upstream
+=======
+>>>>>>> 8981405122ce4c89b585fea5cabdaea77a9bb09c
+>>>>>>> Stashed changes
     const goToScreen = () => {
-        navigation.navigate("Setting")
+        navigation.navigate("Setting");
     }
     return (
         <View style={styles.container}>
             <SafeAreaView style={styles.container}>
             <View style={styles.boxHeader}>
                 <Text style={styles.txtHeader}>Home</Text>
+<<<<<<< Updated upstream
                 <Button style={{position: 'absolute',top:1,right:5}} title="..." ></Button>
+=======
+                <TouchableOpacity 
+                    style={styles.btnMore}  
+                    onPress={()=>{
+                        setVisible(true);
+                    }}        
+                >
+                    <Text style={{color:'black', fontSize:25}}>...</Text>
+                </TouchableOpacity>
+>>>>>>> Stashed changes
             </View>
             <View>
                 <Search></Search>
@@ -84,6 +113,41 @@ const Home = ({ navigation }) => {
                 placement='right'
                 title="Add"
             />
+            <Modal 
+                animationType="fade"
+                transparent={true}
+                visible={isvisible}
+                onBackButtonPress={()=>{
+                    setVisible(false);
+                }}>
+                    <View style={{ flex: 1, backgroundColor: '#000000AA' }}>
+                        <Pressable
+                            onPress={() => {
+                                setVisible(false);
+                            }}
+                            style={{ flex: 1 }}>
+                        </Pressable>
+                        <View style={{
+                            bottom: 0,
+                            position: 'absolute',
+                            width: '100%',
+                            backgroundColor: 'white',
+                            borderTopLeftRadius: 15,
+                            borderTopRightRadius: 15,
+                        }}>
+                            <TouchableOpacity style={{marginBottom: 20, justifyContent:'center', alignItems:'center', marginTop: 20}}>
+                                <Text style={styles.txtMore} >Delete all the completed task</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{marginBottom: 20, justifyContent:'center', alignItems:'center', marginTop: 20}}>
+                                <Text style={styles.txtMore} >Delete task</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{marginBottom: 40, justifyContent:'center', alignItems:'center', marginTop: 20}}>
+                                <Text style={styles.txtMore} >New task</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+            </Modal>
             </SafeAreaView>
         </View>
     );
@@ -114,7 +178,21 @@ const styles = StyleSheet.create({
         marginTop:20,
         marginBottom:20,
     },
-
+    txtMore:{
+        color: '#000',
+        fontSize: 18,
+    },
+    btnMore:{
+        position:'absolute',
+        top: 1,
+        right: 30,
+        height: 50,
+        width: 30,
+        backgroundColor:'white',
+        justifyContent: 'center',
+        alignItems:'center',
+        alignSelf:'flex-end',
+    },
     listTask:{
         alignItems:'center',
         width:width,
