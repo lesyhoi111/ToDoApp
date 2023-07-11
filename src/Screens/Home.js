@@ -1,17 +1,20 @@
 import React, { Component, useState,useContext,useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Dimensions, Pressable, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Dimensions, Pressable, TouchableOpacity, Modal, TextInput } from 'react-native';
 import Search from './components/Search';
 import Task from '../../model/taskModel';
 import themeContext from '../../config/themeContext'
 import { FAB } from '@rneui/themed';
 import { CheckBox } from '@rneui/base';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 const { width, height } = Dimensions.get('window');
 
 
 
 const Home = ({ navigation }) => {
 
-    const [isvisible, setVisible] = useState(false);
+    const [isvisibleAdd, setVisibleAdd] = useState(false);
+    const [isvisibleMore, setVisibleMore] = useState(false);
     const {listTask,getLisst,addTask,updateTask,deleteTask}=Task()
     const theme=useContext(themeContext);
     useEffect(()=>{
@@ -30,7 +33,7 @@ const Home = ({ navigation }) => {
                 <TouchableOpacity 
                     style={styles.btnMore}  
                     onPress={()=>{
-                        setVisible(true);
+                        setVisibleMore(true);
                     }}        
                 >
                     <Text style={{color:'black', fontSize:25}}>...</Text>
@@ -94,18 +97,21 @@ const Home = ({ navigation }) => {
                 color="green"
                 placement='right'
                 title="Add"
+                onPress={()=>{
+                    setVisibleAdd(true);
+                }}
             />
             <Modal 
                 animationType="fade"
                 transparent={true}
-                visible={isvisible}
+                visible={isvisibleMore}
                 onBackButtonPress={()=>{
-                    setVisible(false);
+                    setVisibleMore(false);
                 }}>
                     <View style={{ flex: 1, backgroundColor: '#000000AA' }}>
                         <Pressable
                             onPress={() => {
-                                setVisible(false);
+                                setVisibleMore(false);
                             }}
                             style={{ flex: 1 }}>
                         </Pressable>
@@ -128,8 +134,56 @@ const Home = ({ navigation }) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-
             </Modal>
+            <Modal 
+                animationType="fade"
+                transparent={true}
+                visible={isvisibleAdd}
+                onBackButtonPress={()=>{
+                    setVisibleAdd(false);
+                }}>
+                    <View style={{ flex: 1, backgroundColor: '#000000AA' }}>
+                        <Pressable
+                            onPress={() => {
+                                setVisibleAdd(false);
+                            }}
+                            style={{ flex: 1 }}>
+                        </Pressable>
+                        <View style={{
+                            bottom: 0,
+                            position: 'absolute',
+                            width: '100%',
+                            backgroundColor: 'white',
+                            borderTopLeftRadius: 15,
+                            borderTopRightRadius: 15,
+                        }}>
+                            <View style={styles.line}></View>
+                            <TextInput style={styles.txtTask}
+                                placeholder='New task'
+                            ></TextInput>
+                            <View style={{flex:1,flexDirection:'row', marginStart: 20, marginEnd: 20, marginBottom: 50}}>
+                                <TouchableOpacity>
+                                    <Icon style= {{marginEnd: 20, color:'black'}} size={20} name={"bars"}></Icon>
+                                </TouchableOpacity>
+                                <TouchableOpacity>
+                                    <Icon style= {{marginEnd: 20, color:'black'}} size={20} name={"calendar"}></Icon>
+                                </TouchableOpacity>
+                                <TouchableOpacity 
+                                    style={{backgroundColor:'green',
+                                    borderRadius:15,
+                                    alignItems:'center', 
+                                    height: 30, 
+                                    width:70, 
+                                    position: 'absolute',
+                                    top: 1,
+                                    right: 0, }}>
+                                    <Text style={{fontSize:20, color:'white' }}>Save</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+            </Modal>
+
             </SafeAreaView>
         </View>
     );
@@ -159,6 +213,14 @@ const styles = StyleSheet.create({
         marginLeft:30,
         marginTop:20,
         marginBottom:20,
+    },
+    txtTask:{
+        height: 50,
+        fontSize: 20,
+        magrinTop: 20,
+        marginStart: 20,
+        marginBottom: 20,
+
     },
     txtMore:{
         color: '#000',
@@ -194,6 +256,14 @@ const styles = StyleSheet.create({
         alignItems: "center",
         right:30,
         bottom:25,
+    },
+    line:{
+        width: 75,
+        height: 4,
+        backgroundColor:'grey',
+        alignSelf:'center',
+        marginVertical: 15,
+        borderRadius: 2
     }
 });
 
