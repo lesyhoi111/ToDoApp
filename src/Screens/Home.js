@@ -9,13 +9,13 @@ import { CheckBox } from '@rneui/base';
 const { width, height } = Dimensions.get('window');
 
 const Home = ({ navigation }) => {
-    const {listTask,getLisst,addTask,updateTask,deleteTask}=Task()
+    // const {listTask,getLisst,addTask,updateTask,deleteTask}=Task()
     const theme=useContext(themeContext);
-    useEffect(()=>{
-        // addTask("012123",new Date(),new Date(),1,"62bcf3f9b5b8c2277a4d5b6a","Đang thực hiện","lmao lmao lmao
+    // useEffect(()=>{
+    //     // addTask("012123",new Date(),new Date(),1,"62bcf3f9b5b8c2277a4d5b6a","Đang thực hiện","lmao lmao lmao
         
-            console.log(listTask)
-    },[listTask])
+    //         console.log(listTask)
+    // },[listTask])
     const goToScreen = () => {
         navigation.navigate("Setting")
     }
