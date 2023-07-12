@@ -73,7 +73,6 @@ const Task = () => {
       setRealm(realm1)
       setListTask(realm1.objects('Task11'));
     })
-    realm.close();
   };
 
   const addTask = (name, start_date, due_date, time_set, id_project, state, description, count_time, break_time, long_break_time, long_break_after) => {
@@ -98,6 +97,7 @@ const Task = () => {
           long_break_time: long_break_time,
           long_break_after: long_break_after,
         });
+        // console.log(realm.objects('Task11'))
         setListTask(realm.objects('Task11'));
       });
     } else {
@@ -120,7 +120,6 @@ const Task = () => {
         setListTask(realm.objects('Task11'));
       });
     }
-    realm.close();
     return newTask;
   };
 
@@ -140,7 +139,6 @@ const Task = () => {
         long_break_after = long_break_after,
         setListTask(realm.objects('Task11'));
     });
-    realm.close();
   };
 
   const deleteTask = task => {
@@ -148,7 +146,7 @@ const Task = () => {
       realm.delete(task);
       setListTask(realm.objects('Task11'));
     });
-    realm.close();
+
   };
 
   const closeRealm = () => {
