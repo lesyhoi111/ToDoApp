@@ -1,4 +1,10 @@
 {
   "name": "ToDoApp",
-  "displayName": "ToDoApp"
+  "displayName": "ToDoApp",
+  "expo": {
+    "plugins": [
+      "@expo/vector-icons"
+    ]
+  }
 }
+
