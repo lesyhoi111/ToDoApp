@@ -1,12 +1,14 @@
 //import liraries
 import React, { useState,useContext } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Switch, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Switch, Dimensions,TouchableOpacity } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners'
 import themeContext from '../../config/themeContext'
+import EditSettingController from '../../ViewModel/EditSettingController'
 const { width, height } = Dimensions.get('window');
 
 // create a component
 const Setting = ({ navigation }) => {
+    // const {listParameter,handleUpdateParameter,handleAddParameter}=EditSettingController()
     const theme=useContext(themeContext);
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => {setIsEnabled(previousState => !previousState)
@@ -29,10 +31,10 @@ const Setting = ({ navigation }) => {
                             value={isEnabled}
                             ></Switch>
                     </View>
-                    <Text style={[styles.title,{color:theme.color}]}>Mongodoro</Text>
+                    <Text style={[styles.title,{color:theme.color}]}>Pomodoro</Text>
                     <View style={styles.lineContent}>
                         <Text style={[styles.txtContent,{color:theme.color}]}>Time of task:</Text>
-                        <Text style={[styles.txtContent,{color:theme.color}]}>10 mins</Text>
+                        <Text style={[styles.txtContent,{color:theme.color}]}>0 mins</Text>
                     </View>
                     <View style={styles.lineContent}>
                         <Text style={[styles.txtContent,{color:theme.color}]}>Small break time:</Text>
@@ -47,6 +49,9 @@ const Setting = ({ navigation }) => {
                         <Text style={[styles.txtContent,{color:theme.color}]}>10</Text>
                     </View>
                 </View>
+                <TouchableOpacity style={styles.btn} onPress={()=>{navigation.navigate("EditPomodoro")}}>
+                    <Text style={styles.titlebtn}>Chỉnh sửa</Text>
+                </TouchableOpacity>
             </SafeAreaView>
         </View>
     );
@@ -55,6 +60,21 @@ const Setting = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    btn:{
+        height:45,
+        width:width-60,
+        marginHorizontal:30,
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:'green',
+        marginTop:20,
+        borderRadius:10
+    },
+    titlebtn:{
+        fontSize:20,
+        fontWeight:'500',
+        color:'white'
     },
     boxHeader:{
         height:55,

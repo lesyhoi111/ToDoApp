@@ -5,39 +5,52 @@ import React, { useState, useEffect } from 'react';
 const Task = () => {
   const [realm, setRealm] = useState(null);
   const [listTask, setListTask] = useState([]);
-  
+
   useEffect(() => {
-    Realm.open({
-      schema: [
-        { name: 'Task',
-          primaryKey: 'id',
-          properties: {
-            id: 'objectId',
-            name: 'string',
-            start_date: 'date',
-            due_date: 'date',
-            time_set: 'int',
-            time_done: 'int',
-            id_project: 'objectId',
-            state: 'string',
-            description: 'string'
-          },
+      Realm.open({
+        schema: [
+          {
+            name: 'Task11',
+            primaryKey: 'id',
+            properties: {
+              id: 'objectId',
+              name: 'string',
+              start_date: 'date',
+              due_date: 'date',
+              time_set: 'int',
+              time_done: 'int',
+              idproject: { type: 'string', optional: true },
+              state: 'string',
+              description: 'string',
+              count_time: 'int',
+              break_time: 'int',
+              long_break_time: 'int',
+              long_break_after: 'int',
+            },
+          }
+        ],
+        path: 'task.realm',
+      }).then(realm1 => {
+        console.log("a")
+        setTimeout(() => {
+          setRealm(realm1);
+          setListTask(realm1.objects('Task11'));
+        }, 1000)
+      })
+      return () => {
+        if (realm !== null && !realm.isClosed) {
+          console.log('b')
+          realm.close();
         }
-      ],
-    }).then(realm => {
-      console.log("a")
-      setRealm(realm);
-      setTimeout(()=>{
-        setListTask(realm.objects('Task'));
-        // console.log(realm.objects('Task'))
-    },1000)
-    });
+      };
   }, []);
 
   const getList = () => {
+
     Realm.open({
       schema: [
-        { name: 'Task',
+        {
+          name: 'Task11',
           primaryKey: 'id',
           properties: {
             id: 'objectId',
@@ -46,58 +59,102 @@ const Task = () => {
             due_date: 'date',
             time_set: 'int',
             time_done: 'int',
-            id_project: 'objectId',
+            idproject: { type: 'string', optional: true },
             state: 'string',
-            description: 'string'
+            description: 'string',
+            count_time: 'int',
+            break_time: 'int',
+            long_break_time: 'int',
+            long_break_after: 'int',
           },
         }
       ],
-    }).then(realm => {
-     
-      setListTask(realm.objects('Task'));
-    });
+    }).then(realm1 => {
+      setRealm(realm1)
+      setListTask(realm1.objects('Task11'));
+    })
+    realm.close();
   };
 
-  const addTask = (name,start_date,due_date,time_set,id_project,state,description) => {
+  const addTask = (name, start_date, due_date, time_set, id_project, state, description, count_time, break_time, long_break_time, long_break_after) => {
     if (!realm) {
       return;
     }
     let newTask = null;
-    realm.write(() => {
-      newTask=realm.create('Task', { 
-        id: new Realm.BSON.ObjectId(),
-        name: name,
-        start_date: start_date,
-        due_date: due_date,
-        time_set: time_set,
-        time_done: 0,
-        id_project: new Realm.BSON.ObjectId(),
-        state: state,
-        description: description });
-      setListTask(realm.objects('Task'));
-    });
+    if (id_project == "") {
+      realm.write(() => {
+        newTask = realm.create('Task11', {
+          id: new Realm.BSON.ObjectId(),
+          name: name,
+          start_date: start_date,
+          due_date: due_date,
+          time_set: time_set,
+          time_done: 0,
+          // idproject: "",
+          state: state,
+          description: description,
+          count_time: count_time,
+          break_time: break_time,
+          long_break_time: long_break_time,
+          long_break_after: long_break_after,
+        });
+        setListTask(realm.objects('Task11'));
+      });
+    } else {
+      realm.write(() => {
+        newTask = realm.create('Task11', {
+          id: new Realm.BSON.ObjectId(),
+          name: name,
+          start_date: start_date,
+          due_date: due_date,
+          time_set: time_set,
+          time_done: 0,
+          idproject: id_project,
+          state: state,
+          description: description,
+          count_time: count_time,
+          break_time: break_time,
+          long_break_time: long_break_time,
+          long_break_after: long_break_after,
+        });
+        setListTask(realm.objects('Task11'));
+      });
+    }
+    realm.close();
     return newTask;
   };
 
-  const updateTask = (task,name,start_date,due_date,time_set,time_done,id_project,state,description) => {
+  const updateTask = (task, name, start_date, due_date, time_set, time_done, id_project, state, description, count_time, break_time, long_break_time, long_break_after) => {
     realm.write(() => {
-      task.name= name,
-      task.start_date= start_date,
-      task.due_date= due_date,
-      task.time_set= time_set,
-      task.time_done= time_done,
-      task.id_project= id_project,
-      task.state= state,
-      task.description= description
-      setListTask(realm.objects('Task'));
+      task.name = name,
+        task.start_date = start_date,
+        task.due_date = due_date,
+        task.time_set = time_set,
+        task.time_done = time_done,
+        task.idproject = id_project,
+        task.state = state,
+        task.description = description,
+        count_time = count_time,
+        break_time = break_time,
+        long_break_time = long_break_time,
+        long_break_after = long_break_after,
+        setListTask(realm.objects('Task11'));
     });
+    realm.close();
   };
 
   const deleteTask = task => {
     realm.write(() => {
       realm.delete(task);
-      setListTask(realm.objects('Task'));
+      setListTask(realm.objects('Task11'));
     });
+    realm.close();
+  };
+
+  const closeRealm = () => {
+    // if (realm !== undefined) {
+      realm.close();
+    // }
   };
 
   return {
@@ -106,6 +163,7 @@ const Task = () => {
     addTask,
     updateTask,
     deleteTask,
+    closeRealm
   };
 };
 

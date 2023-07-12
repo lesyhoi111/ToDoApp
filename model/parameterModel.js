@@ -7,6 +7,7 @@ const Parameter = () => {
   const [listParameter, setListParameter] = useState([]);
   
   useEffect(() => {
+    
     Realm.open({
       schema: [
         { name: 'Parameter',
@@ -18,11 +19,19 @@ const Parameter = () => {
           },
         }
       ],
-    }).then(realm => {
-        setRealm(realm);
-        setListParameter(realm.objects('Parameter'));
-        addParameter(10,10,10,10)
+      path: 'parameter.realm',
+    }).then(realm1 => {
+      setTimeout(() => {
+        setRealm(realm1);
+        setListParameter(realm1.objects('Parameter'));
+      }, 1000)
+        // addParameter(10,10,10,10)
     });
+    return () => {
+      if (realm !== null && !realm.isClosed) {
+        realm.close();
+      }
+    };
   }, []);
 
   const getList = () => {
@@ -47,6 +56,7 @@ const Parameter = () => {
       return;
     }
     let newProject = null;
+    
     realm.write(() => {
         newProject=realm.create('Parameter', { 
             init_time: init_time,
