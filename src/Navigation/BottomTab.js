@@ -7,6 +7,7 @@ import Home from '../Screens/Home';
 import themeContext from '../../config/themeContext'
 import Setting from '../Screens/Setting';
 import StackSetting from './StackSetting';
+import Project from '../Screens/Project';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +31,12 @@ function UITab() {
             <MaterialCommunityIcons name="home" color={color} size={36} />
           ),
         }}/>
-
+        <Tab.Screen name="Project" component={Project} options={{
+          tabBarLabel: 'Project',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="laptop" color={color} size={36} />
+          ),
+        }}/>
       <Tab.Screen name="StackSetting" component={StackSetting}  options={{
           tabBarLabel: 'StackSetting',
           tabBarIcon: ({ color }) => (
