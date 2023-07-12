@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from '../Screens/Home';
 import themeContext from '../../config/themeContext'
-import Setting from '../Screens/Setting';
+import StackProject from './StackProject';
 import StackSetting from './StackSetting';
 import Project from '../Screens/Project';
 
@@ -31,8 +31,8 @@ function UITab() {
             <MaterialCommunityIcons name="home" color={color} size={36} />
           ),
         }}/>
-        <Tab.Screen name="Project" component={Project} options={{
-          tabBarLabel: 'Project',
+        <Tab.Screen name="StackProject" component={StackProject} options={{
+          tabBarLabel: 'StackProject',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="laptop" color={color} size={36} />
           ),

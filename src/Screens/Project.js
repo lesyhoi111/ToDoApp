@@ -3,7 +3,6 @@ import React, { useState,useContext } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Switch, Dimensions,TouchableOpacity, Modal, TextInput, Pressable } from 'react-native';
 import themeContext from '../../config/themeContext';
 import { FAB } from '@rneui/themed';
-import KeyboardAwareScrollView from 'react-native-keyboard-aware-scroll-view';
 const { width, height } = Dimensions.get('window');
 
 // create a component
@@ -19,7 +18,8 @@ const Project = ({ navigation }) => {
                 <View style={[styles.body, {backgroundColor:theme.backgroundColor}]}>
                     <Text style={[styles.title,{color:theme.color}]}>List Project</Text>
                         <View style={[styles.listProject,{backgroundColor:theme.backgroundColor}]}>
-                                <TouchableOpacity style={[styles.projectContainer,{backgroundColor:theme.backgroundColor, borderColor:theme.color,}]}>
+                                <TouchableOpacity style={[styles.projectContainer,{backgroundColor:theme.backgroundColor, borderColor:theme.color,}]} 
+                                onPress={()=>{navigation.navigate('Detail')}}>
                                     <Text style={{fontSize:20, color:theme.color}} >List Item</Text>
                                     <Text style={{fontSize:15, color:theme.color}} >Supporting Text</Text>
                                 </TouchableOpacity>
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     txtInput:{
         height: 50,
         fontSize: 20,
-        magrinTop: 20,
         marginStart: 20,
         marginBottom: 20,
     },

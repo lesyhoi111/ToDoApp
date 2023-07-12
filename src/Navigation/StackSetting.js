@@ -1,6 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Setting from '../Screens/Setting'
 import EditPomodoro from '../Screens/EditPomodoro'
+import Project from '../Screens/Project'
+import Detail from '../Screens/Detail'
 const Stack = createNativeStackNavigator();
 
 function StackSetting() {
