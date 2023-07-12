@@ -68,11 +68,12 @@ const Home = ({ navigation }) => {
         handleAddTask,
         handleDeleteTask,
         handleSearch,}=HomeController()
+
     const handleSave=(name,start_date,due_date,time_set,id_project,state,description)=>{
         if(name=="" || start_date==null||due_date==null||time_set==""){
             Alert.alert("Thông báo!","Mời nhập đầy đủ thông tin")
         }else{
-            addTask(name,start_date,due_date,time_set,id_project,state,description)
+            handleAddTask(name,start_date,due_date,time_set,id_project,state,description)
             Alert.alert("Thông báo!","Thêm thành công")
             setVisibleAdd(false)
             setNameTask('')

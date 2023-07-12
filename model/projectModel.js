@@ -19,6 +19,7 @@ const Project = () => {
           },
         }
       ],
+      path: 'project.realm',
     }).then(realm => {
         setRealm(realm);
         setListProject(realm.objects('Project'));
