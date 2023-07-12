@@ -186,7 +186,7 @@ const Detail = ({ navigation }) => {
         <View style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
             <SafeAreaView style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
                 <View style={styles.boxHeader}>
-                    <Text style={[styles.txtHeader,{color:theme.color}]}>Home</Text>
+                    <Text style={[styles.txtHeader,{color:theme.color}]}>Detail</Text>
                     <TouchableOpacity
                         style={styles.btnMore}
                         onPress={() => {
