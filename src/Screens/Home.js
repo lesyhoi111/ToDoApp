@@ -6,12 +6,68 @@ import themeContext from '../../config/themeContext'
 import { FAB } from '@rneui/themed';
 import { CheckBox } from '@rneui/base';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const { width, height } = Dimensions.get('window');
 
 
 
 const Home = ({ navigation }) => {
+    const [checkboxes, setCheckboxes] = useState([
+        false, // Checkbox 1
+        false, // Checkbox 2
+        false, // Checkbox 3
+    ]);
+
+    const handleCheckboxChange = (index) => {
+        const newCheckboxes = [...checkboxes];
+        newCheckboxes[index] = !newCheckboxes[index]; // Đảo ngược giá trị của checkbox
+    
+        setCheckboxes(newCheckboxes);
+    };
+
+    const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(false);
+    const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+  
+    const showStartDatePicker = () => {
+      setStartDatePickerVisibility(true);
+    };
+  
+    const hideStartDatePicker = () => {
+      setStartDatePickerVisibility(false);
+    };
+  
+    const showEndDatePicker = () => {
+      setEndDatePickerVisibility(true);
+    };
+  
+    const hideEndDatePicker = () => {
+      setEndDatePickerVisibility(false);
+    };
+
+    const showDatePicker = () => {
+      setDatePickerVisibility(true);
+    };
+  
+    const hideDatePicker = () => {
+      setDatePickerVisibility(false);
+    };
+  
+    const handleStartDateConfirm = (date) => {
+        if (date) {
+          setStartDate(date);
+        }
+        hideStartDatePicker();
+      };
+    
+      const handleEndDateConfirm = (date) => {
+        if (date) {
+          setEndDate(date);
+        }
+        hideEndDatePicker();
+      };
 
     const [isvisibleAdd, setVisibleAdd] = useState(false);
     const [isvisibleMore, setVisibleMore] = useState(false);
@@ -52,21 +108,33 @@ const Home = ({ navigation }) => {
             <Text style={styles.txtTaskHeader}>On progress</Text>
             <View style={styles.listTask}>
                  <View style={styles.task}>
-                    <CheckBox checked={false}></CheckBox>
+                    <CheckBox            
+                        checked={checkboxes[0]}
+                        onPress={() => handleCheckboxChange(0)}
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"></CheckBox>
                     <TouchableOpacity style={{flex:1}}>
                         <Text style={{fontSize:15, color:'black'}} >List Item</Text>
                         <Text style={{fontSize:10, color:'black'}} >Supporting Text</Text>
                     </TouchableOpacity>
                  </View>
                  <View style={styles.task}>
-                    <CheckBox checked={false}></CheckBox>
+                    <CheckBox 
+                        checked={checkboxes[1]}
+                        onPress={() => handleCheckboxChange(1)}
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"></CheckBox>
                     <TouchableOpacity style={{flex:1}}>
                         <Text style={{fontSize:15, color:'black'}} >List Item</Text>
                         <Text style={{fontSize:10, color:'black'}} >Supporting Text</Text>
                     </TouchableOpacity>
                  </View>
                  <View style={styles.task}>
-                    <CheckBox checked={false}></CheckBox>
+                    <CheckBox 
+                        checked={checkboxes[3]}
+                        onPress={() => handleCheckboxChange(3)}
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"></CheckBox>
                     <TouchableOpacity style={{flex:1}}>
                         <Text style={{fontSize:15, color:'black'}} >List Item</Text>
                         <Text style={{fontSize:10, color:'black'}} >Supporting Text</Text>
@@ -76,21 +144,30 @@ const Home = ({ navigation }) => {
             <Text style={styles.txtTaskHeader}>Completed</Text>
             <View style={styles.listTask}>
                  <View style={styles.task}>
-                    <CheckBox checked={true}></CheckBox>
+                    <CheckBox 
+                        checked={true}
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"></CheckBox>
                     <TouchableOpacity style={{flex:1}}>
                         <Text style={{fontSize:15, color:'black'}} >List Item</Text>
                         <Text style={{fontSize:10, color:'black'}} >Supporting Text</Text>
                     </TouchableOpacity>
                  </View>
                  <View style={styles.task}>
-                    <CheckBox checked={true}></CheckBox>
+                    <CheckBox 
+                        checked={true}
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"></CheckBox>
                     <TouchableOpacity style={{flex:1}}>
                         <Text style={{fontSize:15, color:'black'}} >List Item</Text>
                         <Text style={{fontSize:10, color:'black'}} >Supporting Text</Text>
                     </TouchableOpacity>
                  </View>
                  <View style={styles.task}>
-                    <CheckBox checked={true}></CheckBox>
+                    <CheckBox 
+                        checked={true}
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"></CheckBox>
                     <TouchableOpacity style={{flex:1}}>
                         <Text style={{fontSize:15, color:'black'}} >List Item</Text>
                         <Text style={{fontSize:10, color:'black'}} >Supporting Text</Text>
@@ -166,13 +243,43 @@ const Home = ({ navigation }) => {
                             <TextInput style={styles.txtTask}
                                 placeholder='New task'
                             ></TextInput>
-                            <View style={{flex:1,flexDirection:'row', marginStart: 20, marginEnd: 20, marginBottom: 50}}>
-                                <TouchableOpacity>
-                                    <Icon style= {{marginEnd: 20, color:'black'}} size={20} name={"bars"}></Icon>
-                                </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <Icon style= {{marginEnd: 20, color:'black'}} size={20} name={"calendar"}></Icon>
-                                </TouchableOpacity>
+                            <TextInput style={styles.txtTask}
+                                placeholder='Description'
+                            ></TextInput>
+                            <View style={{flex:1,flexDirection:'column', marginStart: 20, marginEnd: 20, marginBottom: 50}}>
+                                <View style={{flexDirection:'row'}}>
+                                    <TouchableOpacity styles={{justifyContent:'center', alignItems:'center'}} onPress={()=>{showStartDatePicker()}} >
+                                        <Icon style= {{marginStart: 5, color:'black'}} size={20} name={"calendar"}></Icon>
+                                        <Text style={{color:'black',marginBottom: 30}} >Start</Text>
+                                    </TouchableOpacity>
+                                    <Text style={{fontSize:20,color:'black', marginStart:15}}>
+                                        {startDate ? startDate.toDateString().substring(4) : ''}
+                                    </Text>
+                                </View>
+                                <View style={{flexDirection:'row',marginBottom: 15}}>
+                                    <TouchableOpacity styles={{justifyContent:'center', alignItems:'center'}}>
+                                        <Icon style= {{marginStart: 5, color:'black'}} size={20} name={"calendar"} onPress={()=>{showEndDatePicker()}}></Icon>
+                                        <Text style={{color:'black', marginStart:2}} >End</Text>
+                                    </TouchableOpacity>
+                                    <Text style={{fontSize:20,color:'black', marginStart:15}}>
+                                        {endDate ? endDate.toDateString().substring(4) : ''}
+                                    </Text>
+                                </View>
+                                <View style={{flexDirection:'row',marginBottom: 10, alignItems:'center'}}>
+                                    <View styles={{justifyContent:'center', alignItems:'center'}} >
+                                        <Icon style= {{marginStart: 5, color:'black',}} size={20} name={"clock-o"}></Icon>
+                                        <Text style={{color:'black'}} >Time</Text>
+                                    </View>
+                                    <TextInput style={{        
+                                        fontSize: 20,
+                                        width: 'auto',
+                                        textAlign:'center',
+                                        marginStart:15,
+                                        color:'black'}} placeholder='Input time' keyboardType="numeric">
+                                    </TextInput> 
+                                    <Text style={{color:'black', fontSize:20, marginLeft:20}}>minute</Text>
+                                </View>
+           
                                 <TouchableOpacity 
                                     style={{backgroundColor:'green',
                                     borderRadius:15,
@@ -180,15 +287,28 @@ const Home = ({ navigation }) => {
                                     height: 30, 
                                     width:70, 
                                     position: 'absolute',
-                                    top: 1,
+                                    bottom: 1,
                                     right: 0, }}>
                                     <Text style={{fontSize:20, color:'white' }}>Save</Text>
                                 </TouchableOpacity>
+                               
                             </View>
                         </View>
                     </View>
+                    <DateTimePickerModal
+                        isVisible={isStartDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleStartDateConfirm}
+                        onCancel={hideStartDatePicker}
+                    />
+                    <DateTimePickerModal
+                        isVisible={isEndDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleEndDateConfirm}
+                        onCancel={hideEndDatePicker}
+                    />
+   
             </Modal>
-
             </SafeAreaView>
         </View>
     );
@@ -224,8 +344,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         // magrinTop: 20,
         marginStart: 20,
-        marginBottom: 20,
-
+        marginBottom: 20
     },
     txtMore:{
         color: '#000',
