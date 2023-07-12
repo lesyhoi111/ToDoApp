@@ -1734,6 +1734,13 @@
     "prompts" "^2.4.0"
     "semver" "^6.3.0"
 
+"@react-native-community/datetimepicker@^7.4.0", "@react-native-community/datetimepicker@>=6.7.0":
+  "integrity" "sha512-+570921Ho0GwExpw4p3fGJRFZE3dcCWVLaxuVfEkoyvm3S4Fa69waeKFYuBhPkXEAK/WiusLDIgt9yuDvcGajw=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/datetimepicker/-/datetimepicker-7.4.0.tgz"
+  "version" "7.4.0"
+  dependencies:
+    "invariant" "^2.2.4"
+
 "@react-native-community/eslint-config@^3.2.0":
   "integrity" "sha512-ZjGvoeiBtCbd506hQqwjKmkWPgynGUoJspG8/MuV/EfKnkjCtBmeJvq2n+sWbWEvL9LWXDp2GJmPzmvU5RSvKQ=="
   "resolved" "https://registry.npmjs.org/@react-native-community/eslint-config/-/eslint-config-3.2.0.tgz"
@@ -6702,6 +6709,13 @@
   "integrity" "sha512-1dVk9NwhoyKHCSxcrM6vY6cxmojeATsBobDicX0ZKr7DgUF2cBQRTKsimQFvzH8XhOVXyH8p4HyDSZNIFI8OlQ=="
   "resolved" "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.19.tgz"
   "version" "0.71.19"
+
+"react-native-modal-datetime-picker@^17.0.0":
+  "integrity" "sha512-/NFZMlugmd4WnKfNHjWQ5vz7PWfL2ECg8+hH0i661EqunT3+Oulp8a/0BCjNfCy2YEHargeII4T0ztLEe5MsfA=="
+  "resolved" "https://registry.npmjs.org/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-17.0.0.tgz"
+  "version" "17.0.0"
+  dependencies:
+    "prop-types" "^15.7.2"
 
 "react-native-modal@^13.0.1":
   "integrity" "sha512-UB+mjmUtf+miaG/sDhOikRfBOv0gJdBU2ZE1HtFWp6UixW9jCk/bhGdHUgmZljbPpp0RaO/6YiMmQSSK3kkMaw=="
