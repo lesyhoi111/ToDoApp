@@ -87,6 +87,7 @@ const Home = ({ navigation }) => {
     // },[listTask])
     const goToScreen = () => {
         navigation.navigate("Setting");
+        navigation.navigate("Project");
     }
     return (
         <View style={styles.container}>
