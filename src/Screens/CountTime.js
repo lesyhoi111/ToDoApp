@@ -34,7 +34,13 @@ const CountTime = (props) => {
   const handleContinue = () => {
     setIsPaused(false);
     countRef.current = setInterval(() => {
-      setTimer((timer) => timer + 1);
+      setTimer((timer) => {
+        if (timer >= 10) {
+          handleReset();
+          return 0;
+        }
+        return timer + 1;
+      });
     }, 1000);
   };
 // function to handle the reset button press
@@ -54,7 +60,9 @@ const CountTime = (props) => {
   return (
     <View style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
       <Text style={{fontSize:23,color:theme.color,fontWeight:'500'}}>Stopwatch</Text>
-      <Text style={{fontSize:15,color:theme.color,marginBottom:50}}>Time: 20 minutes</Text>
+      <Text style={{fontSize:15,color:theme.color}}>Time: 20 minutes</Text>
+      <Text style={{fontSize:15,color:theme.color,marginBottom:50}}>Time done: 5 minutes</Text>
+      <Text style={{fontSize:18,color:theme.color,marginBottom:10}}>Working time</Text>
       <View style={[styles.timerContainer,{backgroundColor:theme.backgroundColor,borderColor:isActive&&!isPaused?'green':theme.color}]}>
         <Text style={[styles.timer,{color:theme.color}]}>{formatTime(timer)}</Text>
       </View>
@@ -88,7 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingTop:50
+    paddingTop:40
   },
   timerContainer: {
     borderWidth: 4,
