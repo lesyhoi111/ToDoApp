@@ -1,5 +1,5 @@
 //import liraries
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext,useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Switch, Dimensions,TouchableOpacity } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners'
 import themeContext from '../../config/themeContext'
@@ -8,13 +8,49 @@ const { width, height } = Dimensions.get('window');
 
 // create a component
 const Setting = ({ navigation }) => {
-    // const {listParameter,handleUpdateParameter,handleAddParameter}=EditSettingController()
+    const {listParameter,getList,handleUpdateParameter,handleAddParameter}=EditSettingController()
     const theme=useContext(themeContext);
     const [isEnabled, setIsEnabled] = useState(false);
+    const [isFirst, setIsFirst] = useState(true);
+    const [parameter, setParameter] = useState({
+        init_time: 0,
+            break_time: 0,
+            long_break_after: 0,
+            long_break_time: 0,
+    });
     const toggleSwitch = () => {setIsEnabled(previousState => !previousState)
                                 console.log(theme.backgroundColor)
                                 EventRegister.emit("changetheme",!isEnabled)};
+    useEffect(()=>{
+        console.log(listParameter)
+        setParameter({
+            init_time:listParameter[0].init_time,
+            break_time:listParameter[0].break_time,
+            long_break_after:listParameter[0].long_break_after,
+            long_break_time:listParameter[0].long_break_time,
+        })
+        setTimeout(()=>{
+            setIsFirst(false)
+        },1000)
+    },[listParameter])
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            if(isFirst==false){
+            setTimeout(()=>{
+                console.log(listParameter)
+                console.log("123")
+                setParameter({
+                    init_time:listParameter[0].init_time,
+                    break_time:listParameter[0].break_time,
+                    long_break_after:listParameter[0].long_break_after,
+                    long_break_time:listParameter[0].long_break_time,
+                })
+            },3000)
+        }
+        });
+        return unsubscribe;
+    }, [navigation]);
     return (
         <View style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
             <SafeAreaView style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
@@ -34,22 +70,22 @@ const Setting = ({ navigation }) => {
                     <Text style={[styles.title,{color:theme.color}]}>Pomodoro</Text>
                     <View style={styles.lineContent}>
                         <Text style={[styles.txtContent,{color:theme.color}]}>Time of task:</Text>
-                        <Text style={[styles.txtContent,{color:theme.color}]}>0 mins</Text>
+                        <Text style={[styles.txtContent,{color:theme.color}]}>{(parameter.init_time/60).toFixed(2)} mins</Text>
                     </View>
                     <View style={styles.lineContent}>
                         <Text style={[styles.txtContent,{color:theme.color}]}>Small break time:</Text>
-                        <Text style={[styles.txtContent,{color:theme.color}]}>2 mins</Text>
+                        <Text style={[styles.txtContent,{color:theme.color}]}>{(parameter.break_time/60).toFixed(2)} mins</Text>
                     </View>
                     <View style={styles.lineContent}>
                         <Text style={[styles.txtContent,{color:theme.color}]}>Big break time:</Text>
-                        <Text style={[styles.txtContent,{color:theme.color}]}>15 mins</Text>
+                        <Text style={[styles.txtContent,{color:theme.color}]}>{(parameter.long_break_time/60).toFixed(2)} mins</Text>
                     </View>
                     <View style={styles.lineContent}>
                         <Text style={[styles.txtContent,{color:theme.color}]}>Phase number:</Text>
-                        <Text style={[styles.txtContent,{color:theme.color}]}>10</Text>
+                        <Text style={[styles.txtContent,{color:theme.color}]}>{(parameter.long_break_after/60).toFixed(2)} </Text>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.btn} onPress={()=>{navigation.navigate("EditPomodoro")}}>
+                <TouchableOpacity style={styles.btn} onPress={()=>{navigation.navigate("EditPomodoro",{parameter:listParameter[0]})}}>
                     <Text style={styles.titlebtn}>Chỉnh sửa</Text>
                 </TouchableOpacity>
             </SafeAreaView>

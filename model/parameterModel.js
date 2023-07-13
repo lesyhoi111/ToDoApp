@@ -4,7 +4,10 @@ import React, { useState, useEffect } from 'react';
 
 const Parameter = () => {
   const [realm, setRealm] = useState(null);
-  const [listParameter, setListParameter] = useState([]);
+  const [listParameter, setListParameter] = useState([{init_time: 0,
+    break_time: 0,
+    long_break_after: 0,
+    long_break_time: 0,}]);
   
   useEffect(() => {
     
@@ -69,12 +72,12 @@ const Parameter = () => {
     return newProject;
   };
 
-  const updateParameter = (init_time,break_time,long_break_after,long_break_time) => {
+  const updateParameter = (parameter,init_time,break_time,long_break_after,long_break_time) => {
     realm.write(() => {
-            realm.objects('Parameter')[0].init_time= init_time,
-            realm.objects('Parameter')[0].break_time= break_time,
-            realm.objects('Parameter')[0].long_break_after= long_break_after,
-            realm.objects('Parameter')[0].long_break_time= long_break_time,
+      parameter.init_time= init_time,
+      parameter.break_time= break_time,
+      parameter.long_break_after= long_break_after,
+      parameter.long_break_time= long_break_time,
         setListParameter(realm.objects('Parameter'));
     });
   };

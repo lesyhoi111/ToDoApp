@@ -1,18 +1,34 @@
 import React, { useState,useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, SafeAreaView, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, SafeAreaView, Modal,Alert } from 'react-native';
 import themeContext from '../../config/themeContext';
+import TaskController from '../../ViewModel/TaskController'
 import { TextInput } from 'react-native-gesture-handler';
+import { isSearchBarAvailableForCurrentPlatform } from 'react-native-screens';
 
 const { width, height } = Dimensions.get('window');
-const TaskDetail = () => {
-
-const handleEdit = () => {
-
-};
+const TaskDetail = (props) => {
+    const { navigation, route } = props
+    const { task } = route.params
+    const {
+        listTask,
+        getListTask,
+        handleAddTask,
+        handleDeleteTask,
+        handleSearch,
+        handleUpdate,
+    }=TaskController()
+    const handleSave = () => {
+        if(nameTask==""){
+            Alert.alert("Thông báo!","Mời nhập tên task")
+        }else{
+            handleUpdate(task,nameTask,description,task.time_done)
+            setVisibleEdit(false)
+        }
+    };
 
   const [isEditVisible,setVisibleEdit] = useState(false);
-  const [nameTask, setNameTask] = useState('name task');
-  const [description, setDescription] = useState('description');
+  const [nameTask, setNameTask] = useState(task.name);
+  const [description, setDescription] = useState(task.description);
   const theme = useContext(themeContext);
   return (
     <View style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
@@ -20,7 +36,7 @@ const handleEdit = () => {
             <View style={[styles.boxHeader,{backgroundColor:theme.backgroundColor}]}>
                 <Text style={[styles.txtHeader,{color:theme.color}]}>Task Information</Text>
             </View>
-            <View style={[styles.container,{backgroundColor:theme.backgroundColor, marginTop:50, marginLeft: 30, marginRight:30}]}>
+            <View style={[styles.container,{backgroundColor:theme.backgroundColor, marginLeft: 30, marginRight:30}]}>
                 <View style={[styles.infoContext,{backgroundColor:theme.backgroundColor}]} >
                     <Text style={[styles.label,{color:theme.color}]}>Name:   </Text>
                     <Text style={[styles.text,{color:theme.color}]}>{nameTask}</Text>
@@ -31,29 +47,38 @@ const handleEdit = () => {
                 </View>
                 <View style={[styles.infoContext,{backgroundColor:theme.backgroundColor}]} >
                     <Text style={[styles.label,{color:theme.color}]}>Start Date:   </Text>
-                    <Text style={[styles.text,{color:theme.color}]}>01-01-2021</Text>
+                    <Text style={[styles.text,{color:theme.color}]}>{task.start_date.toDateString().substring(4)}</Text>
                 </View>
                 <View style={[styles.infoContext,{backgroundColor:theme.backgroundColor}]} >
                     <Text style={[styles.label,{color:theme.color}]}>End Date:   </Text>
-                    <Text style={[styles.text,{color:theme.color}]}>01-01-2022</Text>
+                    <Text style={[styles.text,{color:theme.color}]}>{task.due_date.toDateString().substring(4)}</Text>
                 </View>
                 <View style={[styles.infoContext,{backgroundColor:theme.backgroundColor}]} >
                     <Text style={[styles.label,{color:theme.color}]}>Time:   </Text>
-                    <Text style={[styles.text,{color:theme.color}]}>40 minutes</Text>
+                    <Text style={[styles.text,{color:theme.color}]}>{task.time_set/60} minutes</Text>
                 </View>
                 <View style={[styles.infoContext,{backgroundColor:theme.backgroundColor}]} >
                     <Text style={[styles.label,{color:theme.color}]}>Time done:   </Text>
-                    <Text style={[styles.text,{color:'red'}]}>50%</Text>
+                    <Text style={[styles.text,{color:'red'}]}>{(task.time_done/60).toFixed(2)} minutes</Text>
+                </View>
+                <View style={{height: 40,flexDirection: 'row',marginBottom: 5,alignItems:'center',backgroundColor:theme.backgroundColor,justifyContent:'center'}} >
+                    <Text style={[styles.label,{color:theme.color,fontSize:20}]}>Pomodoro</Text>
+                </View>
+                <View style={{height: 40,flexDirection: 'row',marginBottom: 20,alignItems:'center',backgroundColor:theme.backgroundColor,justifyContent:'center'}} >
+                    <Text style={[styles.label,{color:theme.color,fontSize:16}]}>Work time: </Text>
+                    <Text style={[styles.text,{color:theme.color,fontSize:16,marginRight:10}]}>{(task.count_time/60).toFixed(2)} mins</Text>
+                    <Text style={[styles.label,{color:theme.color,fontSize:16}]}>Break time: </Text>
+                    <Text style={[styles.text,{color:theme.color,fontSize:16}]}>{(task.break_time/60).toFixed(2)} mins</Text>
                 </View>
             </View>
-            <View style={[{backgroundColor:theme.backgroundColor,marginBottom:50 ,justifyContent:'space-around',flexDirection:'row'}]}>
+            <View style={[{backgroundColor:theme.backgroundColor,marginBottom:30 ,justifyContent:'space-around',flexDirection:'row'}]}>
                 <TouchableOpacity style={styles.button}                    
                     onPress={() => {
                         setVisibleEdit(true);
                     }}>
                     <Text style={styles.buttonText}>Edit</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('CountTime',{task:task})}}>
                     <Text style={styles.buttonText}>Start</Text>
                 </TouchableOpacity>
             </View> 
@@ -86,7 +111,7 @@ const handleEdit = () => {
                                 </TextInput>
                             </View>
                             <View style={{width:'100%', flexDirection:'row',}}>
-                                <TouchableOpacity onPress={()=>{setVisibleEdit(false)}}
+                                <TouchableOpacity onPress={()=>{handleSave()}}
                                     style={{flex:1, paddingVertical: 10, alignItems:'center'}}
                                 >
                                 <Text style={[styles.text, {color: 'blue'}]}> Save</Text>
@@ -129,10 +154,9 @@ const styles = StyleSheet.create({
   },
   infoContext:{
     height: 40,
-    width: 250,
     flexDirection: 'row',
     backgroundColor:'green',
-    marginLeft: 70,
+    marginLeft: 60,
     marginBottom: 20,
     alignItems:'center',
   },
@@ -164,6 +188,7 @@ boxHeader: {
 txtHeader: {
     fontSize: 25,
     color: 'black',
+    fontWeight:'bold'
 },
 });
 

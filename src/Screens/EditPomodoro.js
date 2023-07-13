@@ -1,18 +1,20 @@
 //import liraries
 import React, { useState,useContext } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Switch, Dimensions,TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Switch, Dimensions,TouchableOpacity, TextInput, Alert } from 'react-native';
 import themeContext from '../../config/themeContext'
 import EditSettingController from '../../ViewModel/EditSettingController'
 const { width, height } = Dimensions.get('window');
 
 // create a component
-const EditPomodoro = ({ navigation }) => {
+const EditPomodoro = (props) => {
+    const { navigation, route } = props
+    const { parameter } = route.params
     const theme=useContext(themeContext);
     const {listParameter,handleUpdateParameter,handleAddParameter}=EditSettingController()
-    const [timeOfTask, setTimeOfTask] = useState('');
-    const [smallBreakTime, setSmallBreakTime] = useState('');
-    const [bigBreakTime, setBigBreakTime] = useState('');
-    const [phaseNumber, setPhaseNumber] = useState('');
+    const [timeOfTask, setTimeOfTask] = useState((parameter.init_time/60).toString());
+    const [smallBreakTime, setSmallBreakTime] = useState((parameter.break_time/60).toString());
+    const [bigBreakTime, setBigBreakTime] = useState((parameter.long_break_time/60).toString());
+    const [phaseNumber, setPhaseNumber] = useState((parameter.long_break_after/60).toString());
 
     const logt=()=>{
         console.log(listParameter)
@@ -65,7 +67,7 @@ const EditPomodoro = ({ navigation }) => {
                             />
                     </View>
                 </View>
-                <TouchableOpacity style={styles.btn} onPress={()=>{handleUpdateParameter(timeOfTask,smallBreakTime,phaseNumber,bigBreakTime)}}>
+                <TouchableOpacity style={styles.btn} onPress={()=>{handleUpdateParameter(parameter,timeOfTask,smallBreakTime,phaseNumber,bigBreakTime);Alert.alert("Thông báo!","Lưu thành công");navigation.navigate('Setting')}}>
                     <Text style={styles.titlebtn}>Lưu</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn} onPress={()=>{logt()}}>

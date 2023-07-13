@@ -1,24 +1,76 @@
 import { color } from '@rneui/base';
 import React, { useState, useRef,useContext } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity,Alert } from 'react-native';
+import TaskController from '../../ViewModel/TaskController'
 import themeContext from '../../config/themeContext'
 const CountTime = (props) => {
     const { navigation, route } = props
-    // const { task } = route.params
+    const { task } = route.params
     const theme = useContext(themeContext);
     const [timer, setTimer] = useState(0);
+    const [timeremaining, setTimeremaining] = useState(task.time_set-task.time_done);
     const [isActive, setIsActive] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
+    const [isBreak, setIsBreak] = useState(false);
     const countRef = useRef(null);// reference to the interval ID
+    const {
+      listTask,
+      getListTask,
+      handleAddTask,
+      handleDeleteTask,
+      handleSearch,
+      handleUpdate,
+  }=TaskController()
+    const handleUpdateTime=(timecount)=>{
+      if(timecount!=0){
+      console.log(timecount)
+      console.log(task.time_done+timecount)
+      console.log('handleUpdateTime')
+      handleUpdate(task,task.name,task.description,task.time_done+timecount)
+      }else{
+        handleUpdate(task,task.name,task.description,0)
+      }
+    }
 
-    // function to handle the start button press
+    const handleStartBreak = () => {
+      if ((task.time_set-task.time_done)==0) {
+        Alert.alert("Thông báo!","Công việc đã hoàn thành")
+        return 0;
+      }else{
+        setIsBreak(true)
+      }
+      countRef.current = setInterval(() => {
+        setTimer((timer) => {
+        if (timer >= task.break_time ) {
+          handleResetBreak();
+          return 0;
+        }
+        return timer + 1;
+      });
+      }, 1000);
+    };
+    const handleResetBreak = () => {
+      clearInterval(countRef.current);
+      setTimer(0);
+      setIsBreak(false)
+      handleStart();
+    };
+
   const handleStart = () => {
+    if ((task.time_set-task.time_done)==0) {
+      Alert.alert("Thông báo!","Công việc đã hoàn thành")
+      return 0;
+    }
     setIsActive(true);
     setIsPaused(false);
     countRef.current = setInterval(() => {
       setTimer((timer) => {
-      if (timer >= 10) {
-        handleReset();
+      if (timer >= task.count_time ) {
+        handleReset(task.count_time);
+        return 0;
+      }
+      if (timer>=(task.time_set-task.time_done)) {
+        handleReset(task.time_set-task.time_done);
         return 0;
       }
       return timer + 1;
@@ -32,11 +84,19 @@ const CountTime = (props) => {
   };
 // function to handle the continue button press
   const handleContinue = () => {
+    if ((task.time_set-task.time_done)==0) {
+      Alert.alert("Thông báo!","Công việc đã hoàn thành")
+      return 0;
+    }
     setIsPaused(false);
     countRef.current = setInterval(() => {
       setTimer((timer) => {
-        if (timer >= 10) {
-          handleReset();
+        if (timer >= task.count_time ) {
+          handleReset(task.count_time);
+          return 0;
+        }
+        if (timer>=(task.time_set-task.time_done)) {
+          handleReset(task.time_set-task.time_done);
           return 0;
         }
         return timer + 1;
@@ -44,11 +104,24 @@ const CountTime = (props) => {
     }, 1000);
   };
 // function to handle the reset button press
-  const handleReset = () => {
+  const handleReset = (t) => {
     clearInterval(countRef.current);
+    handleUpdateTime(t)
+    setTimeremaining(timeremaining-t)
     setIsActive(false);
     setIsPaused(false);
     setTimer(0);
+      handleStartBreak();
+
+  };
+  const handleEnd = (t) => {
+    clearInterval(countRef.current);
+    handleUpdateTime(t)
+    setTimeremaining(timeremaining-t)
+    setIsActive(false);
+    setIsPaused(false);
+    setTimer(0);
+    
   };
   // calculate the time values for display
   const formatTime = (time) => {
@@ -59,13 +132,19 @@ const CountTime = (props) => {
 
   return (
     <View style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
-      <Text style={{fontSize:23,color:theme.color,fontWeight:'500'}}>Stopwatch</Text>
-      <Text style={{fontSize:15,color:theme.color}}>Time: 20 minutes</Text>
-      <Text style={{fontSize:15,color:theme.color,marginBottom:50}}>Time done: 5 minutes</Text>
-      <Text style={{fontSize:18,color:theme.color,marginBottom:10}}>Working time</Text>
+      <TouchableOpacity style={{backgroundColor:'red'}} onPress={()=>{handleUpdateTime(0)}}>
+            <Text style={styles.buttonText}>Start</Text>
+          </TouchableOpacity>
+      <Text style={{fontSize:23,color:theme.color,fontWeight:'500'}}>{task.name}</Text>
+      <Text style={{fontSize:15,color:theme.color}}>Time: {task.time_set/60} minutes</Text>
+      <Text style={{fontSize:15,color:theme.color,marginBottom:50}}>Time done: {(task.time_done/60).toFixed(2)} minutes</Text>
+      {isBreak?
+      <Text style={{fontSize:20,color:'red',marginBottom:10,fontWeight:'bold'}}>Break time</Text>
+      :<Text style={{fontSize:20,color:'green',marginBottom:10,fontWeight:'bold'}}>Working time</Text>}
       <View style={[styles.timerContainer,{backgroundColor:theme.backgroundColor,borderColor:isActive&&!isPaused?'green':theme.color}]}>
         <Text style={[styles.timer,{color:theme.color}]}>{formatTime(timer)}</Text>
       </View>
+      {!isBreak?
       <View style={styles.buttonContainer}>
         {!isActive && !isPaused ? (
           <TouchableOpacity style={styles.button} onPress={handleStart}>
@@ -76,7 +155,7 @@ const CountTime = (props) => {
             <TouchableOpacity style={styles.button} onPress={handlePause}>
               <Text style={styles.buttonText}>Pause</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button,{backgroundColor:'red'}]} onPress={handleReset}>
+            <TouchableOpacity style={[styles.button,{backgroundColor:'red'}]} onPress={()=>{handleEnd(timer)}}>
               <Text style={styles.buttonText}>End</Text>
             </TouchableOpacity>
             {isPaused && (
@@ -87,6 +166,9 @@ const CountTime = (props) => {
           </>
         )}
       </View>
+      :
+      <View style={styles.buttonContainer}>
+      </View>}
     </View>
   );
 };

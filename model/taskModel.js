@@ -39,7 +39,6 @@ const Task = () => {
       })
       return () => {
         if (realm !== null && !realm.isClosed) {
-          console.log('b')
           realm.close();
         }
       };
@@ -133,10 +132,10 @@ const Task = () => {
         task.idproject = id_project,
         task.state = state,
         task.description = description,
-        count_time = count_time,
-        break_time = break_time,
-        long_break_time = long_break_time,
-        long_break_after = long_break_after,
+        task.count_time = count_time,
+        task.break_time = break_time,
+        task.long_break_time = long_break_time,
+        task.long_break_after = long_break_after,
         setListTask(realm.objects('Task11'));
     });
   };

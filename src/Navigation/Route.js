@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Main from '../Screens/Main';
 import StackSetting from './StackSetting';
 import StackProject from './StackProject';
+import StackHome from './StackHome';
 import CustomDrawer from './CustomDrawer';
 import { EventRegister } from 'react-native-event-listeners'
 import theme from '../../config/theme'

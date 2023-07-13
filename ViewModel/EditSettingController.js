@@ -9,13 +9,13 @@ const EditSettingController = () => {
     //     closeRealm
     // },[])
 
-    const handleUpdateParameter=(init_time,break_time,long_break_after,long_break_time)=>{
+    const handleUpdateParameter=(parameter,init_time,break_time,long_break_after,long_break_time)=>{
         console.log('handleUpdateParameter');
-        const a=parseInt(init_time, 10);
-        const b=parseInt(break_time, 10);
-        const c=parseInt(long_break_after, 10);
-        const d=parseInt(long_break_time, 10);
-        updateParameter(a,b,c,d)
+        const a=parseInt(init_time, 10)*60;
+        const b=parseInt(break_time, 10)*60;
+        const c=parseInt(long_break_after, 10)*60;
+        const d=parseInt(long_break_time, 10)*60;
+        updateParameter(parameter,a,b,c,d)
     }
     const handleAddParameter=(init_time,break_time,long_break_after,long_break_time)=>{
         const a=parseInt(init_time, 10);
@@ -27,6 +27,7 @@ const EditSettingController = () => {
    
     return {
         listParameter,
+        getList,
         handleUpdateParameter,
         handleAddParameter
     };

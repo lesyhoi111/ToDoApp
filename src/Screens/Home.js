@@ -73,12 +73,16 @@ const Home = ({ navigation }) => {
         if(name=="" || start_date==null||due_date==null||time_set==""){
             Alert.alert("Thông báo!","Mời nhập đầy đủ thông tin")
         }else{
-            handleAddTask(name,start_date,due_date,time_set,id_project,state,description)
+            if(startDate>endDate){
+                Alert.alert("Thông báo!","Ngày bắt đầu phải trước ngày kết thúc")
+            }else{
+            handleAddTask(name,start_date,due_date,time_set*60,id_project,state,description)
             Alert.alert("Thông báo!","Thêm thành công")
             setVisibleAdd(false)
             setNameTask('')
             setDescription('')
             setLongTime('')
+            }
         }
     }
 
@@ -94,6 +98,7 @@ const Home = ({ navigation }) => {
         tasks.forEach((i)=>{setListCheck([...listCheck,false])})
     }, [listTask])
 
+    
 
 
   const handleCheckboxChange1 = (index,task) => {
@@ -169,10 +174,10 @@ const Home = ({ navigation }) => {
             text: 'Delete',
             style: 'destructive',
             onPress: () => {
+                setLoading(true)
                 selectedTasks.forEach((t)=>{
                     handleDeleteTask(t)
                 })
-                setLoading(true)
                 setTimeout(() => {
                     setSelectedTasks([])
                 const lc=listCheck.filter(c=>c==false)
@@ -231,9 +236,9 @@ const Home = ({ navigation }) => {
                     onPress={()=>{handleCheckboxChange1(i,task)}}
                     />
                 
-                  <TouchableOpacity style={{ flex: 1 }}>
+                  <TouchableOpacity style={{ flex: 1 }} onPress={()=>{navigation.navigate('TaskDetail',{task:task})}}>
                             <Text style={{ fontSize: 15, color: theme.color }} >{task.name}</Text>
-                            <Text style={{ fontSize: 10, color: theme.color }} >Done: ({task.time_done}/{task.time_set}) minutes</Text>
+                            <Text style={{ fontSize: 10, color: task.time_done==task.time_set?'green': theme.color }} >Progress: ({(task.time_done/60).toFixed(2)}/{task.time_set/60}) minutes</Text>
                         </TouchableOpacity>
                   </View>
                 ))}

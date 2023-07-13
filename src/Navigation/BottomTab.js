@@ -7,6 +7,7 @@ import Home from '../Screens/Home';
 import themeContext from '../../config/themeContext'
 import StackProject from './StackProject';
 import StackSetting from './StackSetting';
+import StackHome from './StackHome';
 import CountTime from '../Screens/CountTime';
 
 const Tab = createBottomTabNavigator();
@@ -25,7 +26,7 @@ function UITab() {
             height:45
         }
     }}>
-      <Tab.Screen name="Home" component={Home} options={{
+      <Tab.Screen name="Home" component={StackHome} options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="home" color={color} size={36} />
@@ -43,12 +44,7 @@ function UITab() {
             <Ionicons name="md-settings-sharp" color={color} size={35} />
           ),
         }} />
-        <Tab.Screen name="CountTime" component={CountTime}  options={{
-          tabBarLabel: 'CountTime',
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="md-settings-sharp" color={color} size={35} />
-          ),
-        }} />
+        
 
     </Tab.Navigator>
     

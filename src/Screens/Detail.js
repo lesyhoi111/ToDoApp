@@ -73,7 +73,7 @@ const Detail = (props) => {
         if(name=="" || start_date==null||due_date==null||time_set==""){
             Alert.alert("Thông báo!","Mời nhập đầy đủ thông tin")
         }else{
-            handleAddTask(name,start_date,due_date,time_set,project.id.toString(),state,description)
+            handleAddTask(name,start_date,due_date,time_set*60,project.id.toString(),state,description)
             Alert.alert("Thông báo!","Thêm thành công")
             setVisibleAdd(false)
             setNameTask('')
@@ -214,9 +214,9 @@ const Detail = (props) => {
                     onPress={()=>{handleCheckboxChange1(i,task)}}
                     />
                 
-                  <TouchableOpacity style={{ flex: 1 }}>
+                  <TouchableOpacity style={{ flex: 1 }} onPress={()=>{navigation.navigate('TaskDetail',{task:task})}}>
                             <Text style={{ fontSize: 15, color: theme.color }} >{task.name}</Text>
-                            <Text style={{ fontSize: 10, color: theme.color }} >Done: ({task.time_done}/{task.time_set}) minutes</Text>
+                            <Text style={{ fontSize: 10, color: task.time_done==task.time_set?'green': theme.color  }} >Progress: ({(task.time_done/60).toFixed(2)}/{task.time_set/60}) minutes</Text>
                         </TouchableOpacity>
                   </View>
                 ))}
