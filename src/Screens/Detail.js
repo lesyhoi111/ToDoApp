@@ -1,5 +1,5 @@
 import React, { Component, useState, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Dimensions, Pressable, TouchableOpacity, Modal, TextInput,Alert } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Dimensions, Pressable, TouchableOpacity, Modal, TextInput,Alert, ScrollView } from 'react-native';
 import Search from './components/Search';
 import Task from '../../model/taskModel';
 import HomeController from '../../ViewModel/HomeController'
@@ -13,7 +13,9 @@ const { width, height } = Dimensions.get('window');
 
 
 
-const Detail = ({ navigation }) => {
+const Detail = (props) => {
+    const { navigation, route } = props
+    const { project } = route.params
     const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(false);
     const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
     const [startDate, setStartDate] = useState(null);
@@ -52,14 +54,13 @@ const Detail = ({ navigation }) => {
         hideEndDatePicker();
     };
 
+    const [loading, setLoading] = useState(false);
     const [isvisibleAdd, setVisibleAdd] = useState(false);
     const [isvisibleMore, setVisibleMore] = useState(false);
     const [nameTask, setNameTask] = useState('');
     const [description, setDescription] = useState('');
     const [longTime, setLongTime] = useState('');
-    const [searchTXT, setSearchTXT] = useState('');
     const [tasks, setTasks] = useState([]);
-    const [taskDis, setTaskDis] = useState([]);
     const [selectedTasks, setSelectedTasks] = useState([]);
     const [listCheck, setListCheck] = useState([]);
 
@@ -68,11 +69,11 @@ const Detail = ({ navigation }) => {
         handleAddTask,
         handleDeleteTask,
         handleSearch,}=HomeController()
-    const handleSave=(name,start_date,due_date,time_set,id_project,state,description)=>{
+    const handleSave=(name,start_date,due_date,time_set,state,description)=>{
         if(name=="" || start_date==null||due_date==null||time_set==""){
             Alert.alert("Thông báo!","Mời nhập đầy đủ thông tin")
         }else{
-            addTask(name,start_date,due_date,time_set,id_project,state,description)
+            handleAddTask(name,start_date,due_date,time_set,project.id.toString(),state,description)
             Alert.alert("Thông báo!","Thêm thành công")
             setVisibleAdd(false)
             setNameTask('')
@@ -88,8 +89,7 @@ const Detail = ({ navigation }) => {
         //     deleteTask(task)
         // })
         const now=new Date();
-        setTasks(listTask.filter((t)=> t.start_date<=now && now<=t.due_date))
-        setTaskDis(listTask)
+        setTasks(listTask.filter((t)=> t.idproject==project.id.toString()))
         tasks.forEach((i)=>{setListCheck([...listCheck,false])})
     }, [listTask])
 
@@ -113,7 +113,6 @@ const Detail = ({ navigation }) => {
   }
 
   const handleDeleteListTasks = () => {
-    // Xóa các task đã chọn khỏi danh sách tasks
     console.log(selectedTasks)
     if(selectedTasks.length==0){
         Alert.alert("Thông báo!","Mời chọn task cần xóa")
@@ -131,13 +130,17 @@ const Detail = ({ navigation }) => {
             text: 'Delete',
             style: 'destructive',
             onPress: () => {
+                setLoading(true)
                 selectedTasks.forEach((t)=>{
                     handleDeleteTask(t)
                 })
-                setSelectedTasks([])
+                setTimeout(() => {
+                    setSelectedTasks([])
                 const lc=listCheck.filter(c=>c==false)
                 setListCheck(lc)
                 setVisibleMore(false)
+                setLoading(false)
+                }, 500);
             },
           },
         ],
@@ -163,13 +166,17 @@ const Detail = ({ navigation }) => {
             text: 'Delete',
             style: 'destructive',
             onPress: () => {
+                setLoading(true)
                 selectedTasks.forEach((t)=>{
                     handleDeleteTask(t)
                 })
-                setSelectedTasks([])
+                setTimeout(() => {
+                    setSelectedTasks([])
                 const lc=listCheck.filter(c=>c==false)
                 setListCheck(lc)
                 setVisibleMore(false)
+                setLoading(false)
+                }, 500);
             },
           },
         ],
@@ -177,16 +184,13 @@ const Detail = ({ navigation }) => {
       );
     
   }
-  const changeSearch=(txt)=>{
-    setSearchTXT(txt)
-    setTasks(handleSearch(txt))
-  }
 
     return (
         <View style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
+            {loading==false?
             <SafeAreaView style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
                 <View style={styles.boxHeader}>
-                    <Text style={[styles.txtHeader,{color:theme.color}]}>Home</Text>
+                    <Text style={[styles.txtHeader,{color:theme.color}]}>Project Detail</Text>
                     <TouchableOpacity
                         style={styles.btnMore}
                         onPress={() => {
@@ -198,15 +202,14 @@ const Detail = ({ navigation }) => {
 
                 </View>
 
-                <Text style={[styles.txtTaskHeader,{color:theme.color}]}>ToDay</Text>
-                <View style={styles.listTask}>
+                <Text style={[styles.txtTaskHeader,{color:theme.color}]}>{project.project_name}</Text>
+                <ScrollView style={styles.listTask}>
                 {tasks.map((task,i) => (
                     <View style={styles.task} key={i}>
                     <CheckBox
                     containerStyle={{backgroundColor:theme.backgroundColor}}
-                    key={task.id}
+                    key={i}
                     type="checkbox"
-                    value={task.id}
                     checked={listCheck[i]}
                     onPress={()=>{handleCheckboxChange1(i,task)}}
                     />
@@ -218,7 +221,7 @@ const Detail = ({ navigation }) => {
                   </View>
                 ))}
                 
-                </View>
+                </ScrollView>
                 
                 <FAB
                     icon={{ name: 'add', color: 'white' }}
@@ -369,6 +372,10 @@ const Detail = ({ navigation }) => {
 
                 </Modal>
             </SafeAreaView>
+            :
+            <View style={{alignItems:'center'}}>
+                <Text style={styles.txtHeader}>Loading .....</Text>
+            </View>}
         </View>
     );
 };
@@ -420,9 +427,8 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
     listTask: {
-        alignItems: 'center',
         width: width,
-        marginLeft: 40,
+        marginLeft: 30,
     },
     task: {
         flexDirection: 'row',

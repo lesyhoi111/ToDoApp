@@ -7,7 +7,7 @@ import Home from '../Screens/Home';
 import themeContext from '../../config/themeContext'
 import StackProject from './StackProject';
 import StackSetting from './StackSetting';
-import Project from '../Screens/Project';
+import CountTime from '../Screens/CountTime';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,6 +39,12 @@ function UITab() {
         }}/>
       <Tab.Screen name="StackSetting" component={StackSetting}  options={{
           tabBarLabel: 'StackSetting',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="md-settings-sharp" color={color} size={35} />
+          ),
+        }} />
+        <Tab.Screen name="CountTime" component={CountTime}  options={{
+          tabBarLabel: 'CountTime',
           tabBarIcon: ({ color }) => (
             <Ionicons name="md-settings-sharp" color={color} size={35} />
           ),

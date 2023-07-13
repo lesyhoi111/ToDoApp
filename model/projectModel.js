@@ -24,6 +24,11 @@ const Project = () => {
         setRealm(realm);
         setListProject(realm.objects('Project'));
     });
+    return () => {
+      if (realm !== null && !realm.isClosed) {
+        realm.close();
+      }
+    };
   }, []);
 
   const getList = () => {

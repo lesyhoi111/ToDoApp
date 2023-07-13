@@ -3,7 +3,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 // import React from 'react';
 import Main from '../Screens/Main';
-import Setting from '../Screens/Setting';
+import StackSetting from './StackSetting';
+import StackProject from './StackProject';
 import CustomDrawer from './CustomDrawer';
 import { EventRegister } from 'react-native-event-listeners'
 import theme from '../../config/theme'
@@ -36,7 +37,8 @@ function Routes() {
                }}
             >
                 <Drawer.Screen component={Main} name={"Main"} />
-                <Drawer.Screen component={Setting} name={"Setting"} />
+                <Drawer.Screen component={StackSetting} name={"Setting"} />
+                <Drawer.Screen component={StackProject} name={"Project"} />
                 
             </Drawer.Navigator>
         </NavigationContainer>

@@ -1,14 +1,27 @@
 //import liraries
-import React, { useState,useContext } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Switch, Dimensions,TouchableOpacity, Modal, TextInput, Pressable } from 'react-native';
+import React, { useState,useContext,useEffect } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, Switch, Dimensions,TouchableOpacity, Modal, TextInput, Pressable, Alert } from 'react-native';
 import themeContext from '../../config/themeContext';
 import { FAB } from '@rneui/themed';
+import ProjectController from '../../ViewModel/ProjectController'
 const { width, height } = Dimensions.get('window');
 
 // create a component
 const Project = ({ navigation }) => {
+    const {listProject,handleAddProject}=ProjectController()
     const theme=useContext(themeContext);
     const [isvisibleAdd, setVisibleAdd] = useState(false);
+    const [listDis, setListDis] = useState([]);
+    const [nameProject, setNameProject] = useState('');
+    useEffect(() => {
+        console.log(listProject)
+        // listTask.forEach(task => {
+        //     deleteTask(task)
+        // })
+        setListDis(listProject)
+
+    }, [listProject])
+
     return (
         <View style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
             <SafeAreaView style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
@@ -18,15 +31,16 @@ const Project = ({ navigation }) => {
                 <View style={[styles.body, {backgroundColor:theme.backgroundColor}]}>
                     <Text style={[styles.title,{color:theme.color}]}>List Project</Text>
                         <View style={[styles.listProject,{backgroundColor:theme.backgroundColor}]}>
-                                <TouchableOpacity style={[styles.projectContainer,{backgroundColor:theme.backgroundColor, borderColor:theme.color,}]} 
-                                onPress={()=>{navigation.navigate('Detail')}}>
-                                    <Text style={{fontSize:20, color:theme.color}} >List Item</Text>
-                                    <Text style={{fontSize:15, color:theme.color}} >Supporting Text</Text>
+                            {listDis.map((pro,i)=>(
+                                <View key={i}>
+                                <TouchableOpacity  style={[styles.projectContainer,{backgroundColor:'wheat', borderColor:theme.color,}]} 
+                                onPress={()=>{navigation.navigate('Detail',{project:pro})}}>
+                                    <Text style={{fontSize:20, color:'black'}} >{pro.project_name}</Text>
+                                    {/* <Text style={{fontSize:15, color:theme.color}} >Supporting Text</Text> */}
                                 </TouchableOpacity>
-                            <TouchableOpacity style={[styles.projectContainer,{backgroundColor:theme.backgroundColor, borderColor:theme.color,}]}>
-                                <Text style={{fontSize:20, color:theme.color}} >List Item</Text>
-                                <Text style={{fontSize:15, color:theme.color}} >Supporting Text</Text>
-                            </TouchableOpacity>
+                                </View>
+                            ))}
+                                
                         </View>
                 </View>
                 <FAB
@@ -64,7 +78,9 @@ const Project = ({ navigation }) => {
                             <View style={styles.line}></View>
                                 <TextInput style={[styles.txtInput,{color:theme.color}]}
                                     placeholder='New Project'
-                                    placeholderTextColor={theme.color}>
+                                    placeholderTextColor={theme.color}
+                                    value={nameProject}
+                                    onChangeText={(txt)=>{setNameProject(txt)}}>
                                 </TextInput>        
                             <TouchableOpacity 
                                 style={{backgroundColor:'green',
@@ -76,8 +92,9 @@ const Project = ({ navigation }) => {
                                 bottom: 1,
                                 right: 20,
                                 marginBottom: 20,
-                                
-                                }}>
+                                }}
+                                onPress={()=>{handleAddProject(nameProject); setVisibleAdd(false) ;Alert.alert("Thông báo!","Thêm thành công")}}
+                            >
                                 <Text style={{fontSize:20, color:'white' }}>Save</Text>
                             </TouchableOpacity>
                                

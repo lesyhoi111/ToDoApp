@@ -1,5 +1,5 @@
 import React, { Component, useState, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Dimensions, Pressable, TouchableOpacity, Modal, TextInput,Alert } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Dimensions, Pressable, TouchableOpacity, Modal, TextInput,Alert, ScrollView } from 'react-native';
 import Search from './components/Search';
 import Task from '../../model/taskModel';
 import HomeController from '../../ViewModel/HomeController'
@@ -51,7 +51,7 @@ const Home = ({ navigation }) => {
         console.log(endDate)
         hideEndDatePicker();
     };
-
+    const [loading, setLoading] = useState(false);
     const [isvisibleAdd, setVisibleAdd] = useState(false);
     const [isvisibleMore, setVisibleMore] = useState(false);
     const [nameTask, setNameTask] = useState('');
@@ -85,8 +85,8 @@ const Home = ({ navigation }) => {
     const theme = useContext(themeContext);
     useEffect(() => {
         console.log(listTask)
-        // listTask.forEach(task => {
-        //     deleteTask(task)
+        // listTask.forEach(t => {
+        //     handleDeleteTask(t)
         // })
         const now=new Date();
         setTasks(listTask.filter((t)=> t.start_date<=now && now<=t.due_date))
@@ -116,6 +116,7 @@ const Home = ({ navigation }) => {
   const handleDeleteListTasks = () => {
     // Xóa các task đã chọn khỏi danh sách tasks
     console.log(selectedTasks)
+    
     if(selectedTasks.length==0){
         Alert.alert("Thông báo!","Mời chọn task cần xóa")
         return;
@@ -132,13 +133,17 @@ const Home = ({ navigation }) => {
             text: 'Delete',
             style: 'destructive',
             onPress: () => {
+                setLoading(true)
                 selectedTasks.forEach((t)=>{
                     handleDeleteTask(t)
                 })
-                setSelectedTasks([])
+                setTimeout(() => {
+                    setSelectedTasks([])
                 const lc=listCheck.filter(c=>c==false)
                 setListCheck(lc)
                 setVisibleMore(false)
+                setLoading(false)
+                }, 500);
             },
           },
         ],
@@ -167,10 +172,14 @@ const Home = ({ navigation }) => {
                 selectedTasks.forEach((t)=>{
                     handleDeleteTask(t)
                 })
-                setSelectedTasks([])
+                setLoading(true)
+                setTimeout(() => {
+                    setSelectedTasks([])
                 const lc=listCheck.filter(c=>c==false)
                 setListCheck(lc)
                 setVisibleMore(false)
+                setLoading(false)
+                }, 500);
             },
           },
         ],
@@ -185,6 +194,7 @@ const Home = ({ navigation }) => {
 
     return (
         <View style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
+            {loading==false?
             <SafeAreaView style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
                 <View style={styles.boxHeader}>
                     <Text style={[styles.txtHeader,{color:theme.color}]}>Home</Text>
@@ -209,14 +219,14 @@ const Home = ({ navigation }) => {
                 </View>
 
                 <Text style={[styles.txtTaskHeader,{color:theme.color}]}>ToDay</Text>
-                <View style={styles.listTask}>
+                <ScrollView style={styles.listTask}>
                 {tasks.map((task,i) => (
                     <View style={styles.task} key={i}>
                     <CheckBox
                     containerStyle={{backgroundColor:theme.backgroundColor}}
-                    key={task.id}
+                    key={i}
                     type="checkbox"
-                    value={task.id}
+                    // value={task.id}
                     checked={listCheck[i]}
                     onPress={()=>{handleCheckboxChange1(i,task)}}
                     />
@@ -228,7 +238,7 @@ const Home = ({ navigation }) => {
                   </View>
                 ))}
                 
-                </View>
+                </ScrollView>
                 
                 <FAB
                     icon={{ name: 'add', color: 'white' }}
@@ -379,6 +389,10 @@ const Home = ({ navigation }) => {
 
                 </Modal>
             </SafeAreaView>
+            :
+            <View style={{alignItems:'center'}}>
+                <Text style={styles.txtHeader}>Loading .....</Text>
+            </View>}
         </View>
     );
 };
@@ -430,7 +444,6 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
     listTask: {
-        alignItems: 'center',
         width: width,
         marginLeft: 40,
     },
