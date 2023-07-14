@@ -132,9 +132,9 @@ const CountTime = (props) => {
 
   return (
     <View style={[styles.container,{backgroundColor:theme.backgroundColor}]}>
-      <TouchableOpacity style={{backgroundColor:'red'}} onPress={()=>{handleUpdateTime(0)}}>
+      {/* <TouchableOpacity style={{backgroundColor:'red'}} onPress={()=>{handleUpdateTime(0)}}>
             <Text style={styles.buttonText}>Start</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
       <Text style={{fontSize:23,color:theme.color,fontWeight:'500'}}>{task.name}</Text>
       <Text style={{fontSize:15,color:theme.color}}>Time: {task.time_set/60} minutes</Text>
       <Text style={{fontSize:15,color:theme.color,marginBottom:50}}>Time done: {(task.time_done/60).toFixed(2)} minutes</Text>

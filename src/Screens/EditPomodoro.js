@@ -70,9 +70,9 @@ const EditPomodoro = (props) => {
                 <TouchableOpacity style={styles.btn} onPress={()=>{handleUpdateParameter(parameter,timeOfTask,smallBreakTime,phaseNumber,bigBreakTime);Alert.alert("Thông báo!","Lưu thành công");navigation.navigate('Setting')}}>
                     <Text style={styles.titlebtn}>Lưu</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn} onPress={()=>{logt()}}>
+                {/* <TouchableOpacity style={styles.btn} onPress={()=>{logt()}}>
                     <Text style={styles.titlebtn}>log</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </SafeAreaView>
         </View>
     );
